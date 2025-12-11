@@ -126,6 +126,48 @@
             });
         });
         
+        // Animações para Timeline
+// Animações para Timeline - Versão Corrigida
+function animateTimeline() {
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, 200 * Array.from(timelineItems).indexOf(entry.target));
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    timelineItems.forEach(item => {
+        observer.observe(item);
+    });
+}
+
+// Inicializar timeline
+document.addEventListener('DOMContentLoaded', () => {
+    animateTimeline();
+});
+
+// Atualizar timeline ao redimensionar a janela
+let resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        // Recarregar animações se necessário
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        timelineItems.forEach(item => {
+            if (item.getBoundingClientRect().top < window.innerHeight * 0.8) {
+                item.classList.add('visible');
+            }
+        });
+    }, 250);
+});
         // Detectar tamanho da tela para otimizações
         function checkScreenSize() {
             const isMobile = window.innerWidth <= 768;
